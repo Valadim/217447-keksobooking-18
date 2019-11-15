@@ -1,9 +1,6 @@
 'use strict';
-
-var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 
-//var AVATAR_IMG_PATH = 'img/avatars/user{{x}}.png';
 var OFFER_TITLE = 'заголовок предложения #';
 var DESCRIPTION = 'строка с описанием строка с описанием строка с описанием строка с описанием строка с описанием строка с описанием строка с описанием';
 var CHECK_TIME = ['12:00', '13:00', '14:00'];
@@ -18,7 +15,7 @@ var map = document.querySelector('.map');
 var mapPinMain = map.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 var mapFiltersForm = document.querySelector('.map__filters');
-var isMapEnabled = false;
+
 
 var removeElementsAttribute = function (parent, selector, attrName) {
   var childItems = parent.querySelectorAll(selector);
@@ -27,8 +24,8 @@ var removeElementsAttribute = function (parent, selector, attrName) {
   });
 };
 
+
 var enableMap = function () {
-  isMapEnabled = true;
   map.classList.remove('map--faded');
 
   adForm.classList.remove('ad-form--disabled');
@@ -43,12 +40,11 @@ mapPinMain.addEventListener('click', function () {
   enableMap();
 });
 
-mapPinMain.addEventListener('keydown', function(evt) {
+mapPinMain.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     enableMap();
   }
 });
-
 
 
 function getRandomNumberBetween(minNumber, maxNumber) {
@@ -81,29 +77,29 @@ var createOffersList = function (offersListLength) {
   var offersList = [];
   for (var i = 0; i < offersListLength; i++) {
     var avatarImg = 'img/avatars/user0' + (i + 1) + '.png';
-    offersList.push({
-        author: {
-          avatar: avatarImg,
-        },
-        offer: {
-          title: OFFER_TITLE + (i + 1),
-          address: '' + getRandomNumberBetween(100, 999) + ', ' + getRandomNumberBetween(100, 999),
-          price: getRandomNumberBetween(100, 2000) + ' USD',
-          type: getRandomElement(APARTMENT_TYPE),
-          rooms: getRandomNumberBetween(1, 10),
-          guests: getRandomNumberBetween(1, 10),
-          checkin: getRandomElement(CHECK_TIME),
-          checkout: getRandomElement(CHECK_TIME),
-          features: getRandomArray(FEATURES),
-          description: DESCRIPTION,
-          photos: getRandomArray(APARTMENT_PHOTO),
-        },
-        location: {
-          x: getRandomNumberBetween(0, BLOCK_SIZE),
-          y: getRandomNumberBetween(130, 630),
-        },
+    var newOffer = {
+      author: {
+        avatar: avatarImg,
       },
-    );
+      offer: {
+        title: OFFER_TITLE + (i + 1),
+        address: '' + getRandomNumberBetween(100, 999) + ', ' + getRandomNumberBetween(100, 999),
+        price: getRandomNumberBetween(100, 2000) + ' USD',
+        type: getRandomElement(APARTMENT_TYPE),
+        rooms: getRandomNumberBetween(1, 10),
+        guests: getRandomNumberBetween(1, 10),
+        checkin: getRandomElement(CHECK_TIME),
+        checkout: getRandomElement(CHECK_TIME),
+        features: getRandomArray(FEATURES),
+        description: DESCRIPTION,
+        photos: getRandomArray(APARTMENT_PHOTO),
+      },
+      location: {
+        x: getRandomNumberBetween(0, BLOCK_SIZE),
+        y: getRandomNumberBetween(130, 630),
+      },
+    };
+    offersList.push(newOffer);
   }
   return offersList;
 };
