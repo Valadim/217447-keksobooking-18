@@ -105,33 +105,31 @@
 
       for (var i = 0; i < countItems; i++) {
         var pin = pinModule.createPin(mapFiltredPinItems[i], i, pinTemplate.cloneNode(true));
-
         fragment.appendChild(pin);
       }
-
       mapPins.appendChild(fragment);
     }
   };
 
   var clearPins = function () {
     var pins = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = pins.length - 1; i >= 0; i--) {
-      pins[i].remove();
-    }
+    Array.from(pins).forEach(function (pin) {
+      pin.remove();
+    });
   };
 
   var addElementsAttribute = function (parent, selector, attrName, value) {
     var childItems = parent.querySelectorAll(selector);
-    for (var i = 0; i < childItems.length; i++) {
-      childItems[i].setAttribute(attrName, value);
-    }
+    Array.from(childItems).forEach(function (childItem) {
+      childItem.setAttribute(attrName, value);
+    });
   };
 
   var removeElementsAttribute = function (parent, selector, attrName) {
     var childItems = parent.querySelectorAll(selector);
-    for (var i = 0; i < childItems.length; i++) {
-      childItems[i].removeAttribute(attrName);
-    }
+    Array.from(childItems).forEach(function (childItem) {
+      childItem.removeAttribute(attrName);
+    });
   };
 
   var enableMap = function () {
@@ -198,6 +196,7 @@
 
       if (!isMapEnabled) {
         enableMap();
+        backendModule.load(loadPins, onLoadError);
       }
 
       var startCoords = {
@@ -262,8 +261,7 @@
     document.addEventListener('keydown', function (evt) {
       if (evt.keyCode === ESC_KEY) {
         hideOfferCard();
-        notificationModule.hideErrorMessage();
-        notificationModule.hideSuccessMessage();
+        notificationModule.hideActiveMessage();
       }
     });
   };
@@ -274,17 +272,25 @@
     });
   };
 
-  var onSaveFormSuccess = function () {
-    adForm.reset();
+  var setMapDefault = function () {
+    filterModule.resetForm();
     clearPins();
     hideOfferCard();
-
-    notificationModule.showSuccessMessage();
+    disableMap();
     setMapPinMainDefault();
   };
 
+  var onSaveFormSuccess = function () {
+    formModule.resetForm();
+    setMapDefault();
+
+    notificationModule.showSuccessMessage();
+  };
+
   var onSaveFormError = function (errorMessage) {
-    notificationModule.showErrorMessage(errorMessage);
+    notificationModule.showErrorMessage(errorMessage, function () {
+      notificationModule.hideErrorMessage();
+    });
   };
 
   var loadPins = function () {
@@ -320,8 +326,6 @@
   };
 
   var init = function () {
-    backendModule.load(loadPins, onLoadError);
-
     disableMap();
 
     initMapPinMainEvents();
@@ -330,10 +334,12 @@
 
     addPinClickEvent();
 
-    formModule.init(onSaveFormSuccess, onSaveFormError);
+    formModule.init(onSaveFormSuccess, onSaveFormError, setMapDefault);
 
     filterModule.init(applayFilters);
   };
 
   init();
 })();
+
+
