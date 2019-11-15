@@ -165,3 +165,79 @@ var displayAds = function () {
 };
 
 displayAds();
+
+var adFormReset = document.querySelector('.ad-form__reset');
+var adFormCapacity = adForm.querySelector('.ad-form #capacity');
+var adFormTitle = adForm.querySelector('.ad-form #title');
+var adFormType = adForm.querySelector('.ad-form #type');
+var adFormPrice = adForm.querySelector('.ad-form #price');
+var adFormTimeIn = adForm.querySelector('.ad-form #timein');
+var adFormTimeOut = adForm.querySelector('.ad-form #timeout');
+var adFormRoomNumber = document.querySelector('.ad-form #room_number');
+var adFormCapacityOptions = adFormCapacity.querySelectorAll('option');
+
+var mapAvatarData = null;
+var mapAvatarUploader = adForm.querySelector('input[type=file].ad-form-header__input');
+var mapAvatarDropArea = adForm.querySelector('.ad-form-header__drop-zone');
+var mapAvatar = adForm.querySelector('.ad-form-header__preview img');
+var mapAvatarImgUrl = mapAvatar.src;
+
+var mapImagesData = [];
+var getCheckMaxImages = function () {
+  return mapImagesData.length < MAX_IMAGES_COUNT;
+};
+var imagesUploader = adForm.querySelector('input[type=file].ad-form__input');
+var imagesDropArea = adForm.querySelector('.ad-form__drop-zone');
+var imagesContainer = adForm.querySelector('.ad-form__photo-container');
+var formImage = adForm.querySelector('.ad-form__photo');
+
+var validateAdFormTitle = function () {
+  var message = '';
+  if (!adFormTitle.validity.valid) {
+    if (adFormTitle.validity.valueMissing) {
+      message = 'Это поле обязательное';
+    } else if (adFormTitle.validity.tooShort) {
+      message = 'Длинна должна быть не менее 30 символов';
+    } else if (adFormTitle.validity.tooLong) {
+      message = 'Длинна должна быть не более 100 символов';
+    }
+  }
+  adFormTitle.setCustomValidity(message);
+};
+
+var checkAdFormRoomNumberValues = function () {
+  var roomNumber = adFormRoomNumber.value;
+  var optionCapacityValue = null;
+
+  Array.from(adFormCapacityOptions).forEach(function (adFormOptionCapacityOption) {
+    optionCapacityValue = adFormOptionCapacityOption.value;
+    adFormOptionCapacityOption.disabled = !RoomsCapacity[roomNumber].includes(optionCapacityValue);
+  });
+};
+
+var validateaAFormCapacity = function () {
+  var capacityValue = adFormCapacity.value;
+  var roomNumber = adFormRoomNumber.value;
+  var message = '';
+
+  if (!RoomsCapacity[roomNumber].includes(capacityValue)) {
+    switch (roomNumber) {
+      case dataModule.Room.ONE:
+        message = 'Выберите не более 1 гостя';
+        break;
+      case dataModule.Room.TWO:
+        message = 'Выберите не более 2 гостей';
+        break;
+      case dataModule.Room.THREE:
+        message = 'Выберите не более 3 гостей';
+        break;
+      case dataModule.Room.ONEHUNDRED:
+        message = 'Выберите не для гостей';
+        break;
+
+      default:
+        message = 'Неверное колличество гостей';
+    }
+  }
+  adFormCapacity.setCustomValidity(message);
+};
