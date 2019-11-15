@@ -1,5 +1,8 @@
 'use strict';
 
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+
 //var AVATAR_IMG_PATH = 'img/avatars/user{{x}}.png';
 var OFFER_TITLE = 'заголовок предложения #';
 var DESCRIPTION = 'строка с описанием строка с описанием строка с описанием строка с описанием строка с описанием строка с описанием строка с описанием';
@@ -10,8 +13,43 @@ var APARTMENT_PHOTO = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'ht
 var BLOCK_SIZE = 1100;
 var RELATIVE_ADS_COUNT = 1;
 
+
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+var mapPinMain = map.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var mapFiltersForm = document.querySelector('.map__filters');
+var isMapEnabled = false;
+
+var removeElementsAttribute = function (parent, selector, attrName) {
+  var childItems = parent.querySelectorAll(selector);
+  Array.from(childItems).forEach(function (childItem) {
+    childItem.removeAttribute(attrName);
+  });
+};
+
+var enableMap = function () {
+  isMapEnabled = true;
+  map.classList.remove('map--faded');
+
+  adForm.classList.remove('ad-form--disabled');
+  removeElementsAttribute(adForm, 'fieldset', 'disabled');
+
+  mapFiltersForm.classList.remove('ad-form--disabled');
+  removeElementsAttribute(mapFiltersForm, 'select', 'disabled');
+  removeElementsAttribute(mapFiltersForm, 'fieldset', 'disabled');
+};
+
+mapPinMain.addEventListener('click', function () {
+  enableMap();
+});
+
+mapPinMain.addEventListener('keydown', function(evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    enableMap();
+  }
+});
+
+
 
 function getRandomNumberBetween(minNumber, maxNumber) {
   return Math.round(minNumber + Math.random() * (maxNumber - minNumber));
