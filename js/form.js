@@ -253,11 +253,11 @@
     });
 
     var highlight = function () {
-      dropArea.style.color = '#ff5635';
-      dropArea.style.borderColor = '#ff5635';
+      dropArea.style.color = '#E74C3C';
+      dropArea.style.borderColor = '#E74C3C';
     };
 
-    var unhighlight = function () {
+    var removeHighlight = function () {
       dropArea.style.color = '';
       dropArea.style.borderColor = '';
     };
@@ -280,7 +280,7 @@
     dragDropLeaveEvents.forEach(function (eventName) {
       dropArea.addEventListener(eventName, function () {
         if (getCheckMaxImages()) {
-          unhighlight();
+          removeHighlight();
         }
       }, false);
     });
@@ -290,7 +290,7 @@
         if (uploader === mapAvatarUploader) {
           uploadPreview(evt.dataTransfer.files[0], cb);
         } else if (getCheckMaxImages()) {
-          unhighlight();
+          removeHighlight();
 
           Array.from(evt.dataTransfer.files).forEach(function (file) {
             uploadPreview(file, cb);
