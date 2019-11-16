@@ -9,6 +9,11 @@
     IMAGES: 'images'
   };
 
+  var BUNGALO_VALUE = 0;
+  var FLAT_VALUE = 1000;
+  var HOUSE_VALUE = 5000;
+  var PALACE_VALUE = 10000;
+
   var dataModule = window.data;
   var backEndModule = window.backend;
 
@@ -19,10 +24,10 @@
   RoomsCapacity[dataModule.Room.ONEHUNDRED] = [dataModule.Capacity.EMPTY];
 
   var MinTypesPrice = {};
-  MinTypesPrice[dataModule.Type.BUNGALO.value] = 0;
-  MinTypesPrice[dataModule.Type.FLAT.value] = 1000;
-  MinTypesPrice[dataModule.Type.HOUSE.value] = 5000;
-  MinTypesPrice[dataModule.Type.PALACE.value] = 10000;
+  MinTypesPrice[dataModule.Type.BUNGALO.value] = BUNGALO_VALUE;
+  MinTypesPrice[dataModule.Type.FLAT.value] = FLAT_VALUE;
+  MinTypesPrice[dataModule.Type.HOUSE.value] = HOUSE_VALUE;
+  MinTypesPrice[dataModule.Type.PALACE.value] = PALACE_VALUE;
 
   var adForm = document.querySelector('.ad-form');
   var adFormReset = document.querySelector('.ad-form__reset');
@@ -74,7 +79,7 @@
     });
   };
 
-  var validateaAFormCapacity = function () {
+  var validateFormCapacity = function () {
     var capacityValue = adFormCapacity.value;
     var roomNumber = adFormRoomNumber.value;
     var message = '';
@@ -157,10 +162,10 @@
         break;
       case adFormRoomNumber.id:
         checkAdFormRoomNumberValues();
-        validateaAFormCapacity();
+        validateFormCapacity();
         break;
       case adFormCapacity.id:
-        validateaAFormCapacity();
+        validateFormCapacity();
         break;
     }
     checkAdFormTimes(evt.target);
@@ -173,7 +178,7 @@
     adForm.addEventListener('input', function (evt) {
       onAdFormSelectInput(evt);
     }, true);
-    validateaAFormCapacity();
+    validateFormCapacity();
   };
 
   var setAddress = function (value) {
@@ -184,7 +189,7 @@
     adForm.addEventListener('submit', function (evt) {
       evt.preventDefault();
 
-      validateaAFormCapacity();
+      validateFormCapacity();
 
       if (adForm.checkValidity()) {
         var formData = new FormData(adForm);

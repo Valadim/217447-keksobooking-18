@@ -37,7 +37,7 @@
   var pinTemplate = document.querySelector('#pin');
 
   var isMapEnabled = false;
-  var draggedMapPinButton = false;
+  var isDraggedMapPinButton = false;
 
   var mapPinItems = [];
   var mapFiltredPinItems = [];
@@ -76,7 +76,7 @@
 
   var addPinClickEvent = function () {
     mapPins.addEventListener('click', function (evt) {
-      if (!draggedMapPinButton) {
+      if (!isDraggedMapPinButton) {
         var mapPinButton = null;
 
         if (evt.target.classList.contains('map__pin') && !evt.target.classList.contains('map__pin--main')) {
@@ -91,7 +91,7 @@
         }
       } else {
         evt.preventDefault();
-        draggedMapPinButton = false;
+        isDraggedMapPinButton = false;
       }
     });
   };
@@ -212,7 +212,7 @@
       var onMouseMove = function (moveEvt) {
         moveEvt.preventDefault();
 
-        draggedMapPinButton = true;
+        isDraggedMapPinButton = true;
 
         var shift = {
           x: startCoords.x - moveEvt.clientX,
