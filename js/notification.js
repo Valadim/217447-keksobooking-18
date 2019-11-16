@@ -5,12 +5,25 @@
   var successTemplate = document.querySelector('#success').content;
   var errorMessage = null;
   var successMessage = null;
-  var documentClickHandler = null;
+  var messageOverlayClickHandler = null;
   var mainNode = document.querySelector('main');
+
+  var initMessageOverlayMouseClick = function (messageOverlay) {
+    messageOverlayClickHandler = messageOverlay.addEventListener('click', function () {
+      hideActiveMessage();
+    });
+  };
 
   var showErrorMessage = function (errorMessageText, onCloseCallback) {
     errorMessage = errorTemplate.querySelector('.error').cloneNode(true);
     var errorButton = errorMessage.querySelector('.error__button');
+
+    var errorDescription = document.createElement('div');
+    errorDescription.style.color = '#ffffff';
+    errorDescription.textContent = errorMessageText;
+    errorMessage.appendChild(errorDescription);
+
+    errorMessage.insertBefore(errorDescription, errorButton);
 
     errorButton.addEventListener('click', function (evt) {
       evt.preventDefault();
@@ -22,7 +35,9 @@
         onCloseCallback();
       }
     });
+
     mainNode.insertAdjacentElement('afterbegin', errorMessage);
+    initMessageOverlayMouseClick(errorMessage);
   };
 
   var hideErrorMessage = function () {
@@ -32,29 +47,31 @@
     }
   };
 
-  var showSuccessMessage = function () {
-    successMessage = successTemplate.querySelector('.success').cloneNode(true);
-    mainNode.insertAdjacentElement('afterbegin', successMessage);
-    documentClickHandler = document.addEventListener('click', function () {
-      if (successMessage) {
-        hideSuccessMessage();
-      }
-    });
-  };
-
-  var hideSuccessMessage = function () {
+  var hideActiveMessage = function () {
+    if (successMessage || errorMessage) {
+      document.removeEventListener('click', messageOverlayClickHandler);
+      messageOverlayClickHandler = null;
+    }
     if (successMessage) {
       successMessage.remove();
       successMessage = null;
-      document.removeEventListener('click', documentClickHandler);
-      documentClickHandler = null;
     }
+    if (errorMessage) {
+      errorMessage.remove();
+      errorMessage = null;
+    }
+  };
+
+  var showSuccessMessage = function () {
+    successMessage = successTemplate.querySelector('.success').cloneNode(true);
+    mainNode.insertAdjacentElement('afterbegin', successMessage);
+    initMessageOverlayMouseClick(successMessage);
   };
 
   window.notification = {
     showErrorMessage: showErrorMessage,
     hideErrorMessage: hideErrorMessage,
     showSuccessMessage: showSuccessMessage,
-    hideSuccessMessage: hideSuccessMessage
+    hideActiveMessage: hideActiveMessage
   };
 })();

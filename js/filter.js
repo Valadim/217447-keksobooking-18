@@ -6,13 +6,13 @@
   var dataModule = window.data;
   var debounce = window.debounce;
 
-  var mapFilters = document.querySelector('.map__filters');
+  var mapFormFilters = document.querySelector('.map__filters');
 
-  var typeFilter = mapFilters.querySelector('#housing-type');
-  var priceFilter = mapFilters.querySelector('#housing-price');
-  var roomsFilter = mapFilters.querySelector('#housing-rooms');
-  var guestsFilter = mapFilters.querySelector('#housing-guests');
-  var featureFilters = mapFilters.querySelectorAll('.map__checkbox');
+  var typeFilter = mapFormFilters.querySelector('#housing-type');
+  var priceFilter = mapFormFilters.querySelector('#housing-price');
+  var roomsFilter = mapFormFilters.querySelector('#housing-rooms');
+  var guestsFilter = mapFormFilters.querySelector('#housing-guests');
+  var featureFilters = mapFormFilters.querySelectorAll('.map__checkbox');
   var features = [];
 
   var CompareType = {
@@ -111,7 +111,7 @@
   };
 
   var init = function (cb) {
-    mapFilters.addEventListener('change', function (evt) {
+    mapFormFilters.addEventListener('change', function (evt) {
       var options = {
         target: evt.target,
         cb: cb
@@ -119,6 +119,10 @@
 
       debounce(onMapFiltersChange, options);
     });
+  };
+
+  var resetForm = function () {
+    mapFormFilters.reset();
   };
 
   var onMapFiltersChange = function (args) {
@@ -133,6 +137,7 @@
 
   window.filter = {
     init: init,
+    resetForm: resetForm,
     getFilterComparer: getFilterComparer
   };
 })();
